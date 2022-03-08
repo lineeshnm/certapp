@@ -1,12 +1,16 @@
 import React from 'react'
 import Dashboard from '../components/Dashboard'
+import AdminRenew from '../components/AdminRenew'
+import { isAuth } from '../actions/auth';
 
 const URL = process.env.URL
 
 export default function ToRenew({certs}) {
   // console.log({certs})
   return (
-    <Dashboard certs={certs} pageName="To Renew" />
+    <>
+    { isAuth() ? (<AdminRenew certs={certs} pageName="To Renew" />) :  (<Dashboard certs={certs} pageName="To Renew" />)}
+    </>
   )
 }
 

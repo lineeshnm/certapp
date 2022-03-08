@@ -35,10 +35,12 @@ This includes the authentication mechanism. where users need to login. This is m
 ## Singe Modify page need to include all details- Done
 #### Cancel Button - function - completed
 #### Edit most of the fields - completed
+### Change view for Admin users. - AdminDashboard Component change in every page - Done
+### Modal to Delete confirmation - completed
+### DB modification for admin users - done
+#### Confirm to Upload to DB - Delete worked. Modify to code. - done
 
 
-### DB modification for admin users
-### Modal to Delete confirmation
-#### Confirm to Upload to DB 
 #### Filter option in Bulk Update
 ## TODO: Filter the renewed, to renew list based on how many days to renew
+## Contact Card implement the Email or chat function

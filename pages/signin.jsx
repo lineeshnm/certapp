@@ -55,7 +55,7 @@ const SignIn = () => {
     const signinForm = () => {
         return (
             // <div className="bg-gray-900 h-screen w-full relative overflow-hidden flex justify-center items-center">
-            <div className='h-screen w-full relative overflow-hidden flex justify-center items-center'>
+            <div className='w-full relative flex justify-center items-center py-12'>
                 <Background />
                 <Tilt>
                     <div className="container h-96 w-96 bg-white bg-opacity-10 rounded-2xl shadow-5xl relative z-2 border border-opacity-30 border-r-0 border-b-0 backdrop-filter backdrop-blur-sm">

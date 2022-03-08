@@ -58,7 +58,7 @@ const updatedatabase = () => {
                     <div className='h-40 w-auto mt-6 py-8 bg-white bg-opacity-10 rounded-2xl text-white shadow-5xl relative z-2 border border-opacity-30 border-r-0 border-b-0 backdrop-filter backdrop-blur-sm'>
                         <div className='flex p-6 justify-evenly space-x-6'>
                         <div key="drop" className={`p-6 my-2 h-30 w-96 text-center text-white border-cyan-400 max-w-md border-2 ${
-                            highlighted ? "border-purple-600-600 bg-purple-100 text-blue-700" : "border-gray-600"
+                            highlighted ? "border-purple-600-600 bg-purple-100 text-blue-700" : "border-white-600"
                             }`}
                             onDragEnter={() => {
                                 setHighlighted(true);
@@ -92,7 +92,7 @@ const updatedatabase = () => {
                             </Button>
                         </div>
                         <div key="clear"  className='my-auto'>
-                            <Button variant="contained" component="span" className='bg-blue-400' onClick={() => setData([])}>
+                            <Button variant="contained" component="span" className='bg-orange-400 hover:bg-red-400' onClick={() => setData([])}>
                                 Clear
                             </Button>
                         </div>

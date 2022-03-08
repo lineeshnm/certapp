@@ -5,9 +5,30 @@ import Grid from '@mui/material/Grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Tooltip from '@mui/material/Tooltip';
-import { color } from '@mui/system';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
 
-const ReadOnlyRow = ({ cert , handleEditClick, handleDeleteClick, modified }) => {
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
+const ReadOnlyRow = ({ cert , handleEditClick, handleDeleteConfirm, modified }) => {
+
+    const [open, setOpen] = React.useState(false);
+    const handleClose = () => setOpen(false);
+
+    const handleDeleteClick = (certId) => {
+        console.log("delete clicked for ", certId)
+        setOpen(true)
+    };
     // console.log({modified})
   return (
     <div key={cert._id} >
@@ -64,6 +85,31 @@ const ReadOnlyRow = ({ cert , handleEditClick, handleDeleteClick, modified }) =>
                 </Grid>
             </Grid>
         </Box>
+        <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box sx={style} className='space-x-3 bg-white bg-opacity-10 rounded-2xl text-white shadow-5xl relative z-2 border border-opacity-30 border-r-0 border-b-0 backdrop-filter backdrop-blur-sm'>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+                Are you Sure?
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                You wanted to delete this thumbprint entry ? {cert.thumbPrint}
+            </Typography>
+            <Button 
+                variant="contained" 
+                name="delete" 
+                className='bg-red-400 hover:bg-red-600' 
+                onClick={() => {
+                    handleDeleteConfirm(cert._id)
+                    setOpen(false)
+                }
+            }>Delete</Button>
+            <Button variant="contained" name="cancel" className='bg-blue-400 hover:bg-blue-600' onClick={handleClose}>Cencel</Button>
+            </Box>
+        </Modal>
     </div>
   )
 };

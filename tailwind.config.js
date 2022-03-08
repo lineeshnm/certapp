@@ -7,12 +7,14 @@ module.exports = {
     extend: {
       width: {
         '80-r': '80rem',
+        '60-r': '60rem',
         '40-r': '40rem',
         '35-r': '35rem',
         '30-r': '30rem'
       },
       height: {
         '80-r': '80rem',
+        '60-r': '60rem',
         '40-r': '40rem',
         '35-r': '35rem',
         '30-r': '30rem'

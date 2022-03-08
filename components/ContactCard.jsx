@@ -20,17 +20,17 @@ const ContactCard = () => {
             <Typography gutterBottom variant="h5" component="div">
               Lineesh.NM
             </Typography>
-            <Typography variant="body1" color="text.secondary">
+            <Typography variant="body1">
               Try login or This feature not available. 
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2">
               Contact Administrator:
               lineesh.niduvappurathmeethal@barclays.com
             </Typography>
         </CardContent>
         <CardActions>
-            <Button size="small">Contact</Button>
-            <Button size="small">Email</Button>
+            <Button size="small" className='bg-blue-600 hover:bg-blue-300 text-white hover:text-black'>Contact</Button>
+            <Button size="small" className='bg-blue-600 hover:bg-blue-300 text-white hover:text-black'>Email</Button>
         </CardActions>
         </Card>
     </div>

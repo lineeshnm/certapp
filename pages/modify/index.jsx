@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -14,26 +15,11 @@ import ReadOnlyRow from '../../components/ReadOnlyRow';
 import EditableRow from '../../components/EditableRow';
 import { isAuth } from '../../actions/auth';
 import ContactCard from '../../components/ContactCard';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+
 import Background from '../../components/Background';
 
 const APP_NAME = process.env.APP_NAME
 const URL = process.env.URL
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
 
 const environments = [
   {
@@ -68,6 +54,7 @@ const environments = [
 
 
 const Modify = ({certs}) => {
+  const router = useRouter()
   const [serverSearch, setServerSearch] = useState('');
   const [cnSearch, setCnSearch] = useState('')
   const [itsiSearch, setItsiSearch] = useState('')
@@ -92,9 +79,7 @@ const Modify = ({certs}) => {
   const [deletedID, setdeletedID] = useState([]);
   const [modifiedID, setModifiedID] = useState([]);
 
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
 
   const handleSaveClick = (event) => {
     event.preventDefault();
@@ -160,6 +145,50 @@ const Modify = ({certs}) => {
     setEditCertId(null);
   };
 
+  const handleUploadDB = async () => {
+    if ( deletedID.length > 0 ) {
+      try {
+        const res =  await fetch(`${URL}/api/certs/bulk?ids=${deletedID}`, {
+            method: 'DELETE',
+        })
+        const data = await res.json()
+        console.log({data})
+        // Router.back()
+      } catch (error) {
+          console.log({error})
+      }
+    } else {
+      console.log("Nothing to Delete")
+    }
+    if ( modifiedID.length > 0 ) {
+      console.log("Starting to modify")
+      try {
+        for (const id of modifiedID) {
+          const {serverName, thumbPrint, keyStoreLocation, commonName, environment, itServiceInstance, sfGroup, validTo} = certList.filter(cert => cert._id === id)[0]
+          const res =  await fetch(`${URL}/api/certs/${id}`, {
+            method: 'PUT',
+            headers: {
+                "Accept" : "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({serverName, thumbPrint, keyStoreLocation, commonName, environment, itServiceInstance, sfGroup, validTo})
+          })
+          const data = await res.json()
+          console.log({data})
+        }
+      } catch (error) {
+          console.log({error})
+      }
+    } else {
+      console.log("Nothing to Modify")
+    }
+    // https://stackoverflow.com/questions/59724331/mongodb-update-multiple-documents-with-different-values
+    // Iterate through modifiedID and get the modified details from certList and call individual ID modification {API}/cert/[id].PUT
+    // Check every update worked well. 
+    // Refresh the page
+    router.reload(window.location.pathname)
+  }
+
   const handleDiscardClick = () => {
     seThumbPrintSearch('')
     setServerSearch('')
@@ -172,8 +201,7 @@ const Modify = ({certs}) => {
     setCertList(certs)
   }
 
-  const handleDeleteClick = (certId) => {
-    setOpen(true)
+  const handleDeleteConfirm = (certId) => {
     const existingID = deletedID && deletedID.find((id) => id === certId)
     if (!!existingID === false) {
       setdeletedID(oldArray => [...oldArray, certId])
@@ -186,7 +214,9 @@ const Modify = ({certs}) => {
     newCertList.splice(index, 1);
 
     setCertList(newCertList);
-  };
+    // setOpen(false)
+    console.log({deletedID})
+};
 
   const filterThumbPrint = (array) => {
     if (thumbPrintSearch === '') {
@@ -352,7 +382,7 @@ const Modify = ({certs}) => {
                 Actions
                 <br />
                 <Tooltip title="Update DataBase" arrow>
-                  <CloudUploadIcon color="primary" sx={{ fontSize: 32 }} />
+                  <CloudUploadIcon color="primary" sx={{ fontSize: 32 }} onClick={handleUploadDB}/>
                 </Tooltip>
                 <Tooltip title="Discard changes" arrow>
                   <BackspaceIcon color="error" sx={{ fontSize: 32 }} onClick={handleDiscardClick}/>
@@ -360,10 +390,11 @@ const Modify = ({certs}) => {
               </Grid>
             </Grid>
             {certList.map((cert) => (
-              <>
+              <div key={cert._id}>
               {
                 editCertId === cert._id ? (
                   <EditableRow 
+                  key={cert._id}
                   cert={cert} 
                   editFormData={editFormData}
                   handleEditFormChange={handleEditFormChange}
@@ -373,35 +404,19 @@ const Modify = ({certs}) => {
                   />
                 ) : (
                 <ReadOnlyRow 
+                  key={cert._id}
                   cert={cert} 
                   handleEditClick={handleEditClick}
-                  handleDeleteClick={handleDeleteClick}
+                  handleDeleteConfirm={handleDeleteConfirm}
                   modified={modifiedID.includes(cert._id)}
                 />
                 )
               }
-              </>                        
+              </div>                        
             ))}
           </Card>
         </div>
       )}
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style} className='space-x-3'>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Are you Sure?
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            You wanted to delete this entry?
-          </Typography>
-          <Button variant="contained" name="delete" className='bg-red-400 hover:bg-red-600' onClick={handleClose}>Delete</Button>
-          <Button variant="contained" name="cancel" className='bg-blue-400 hover:bg-blue-600' onClick={handleClose}>Cencel</Button>
-        </Box>
-      </Modal>
     </div>
   )
 };

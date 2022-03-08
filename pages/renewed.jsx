@@ -1,12 +1,16 @@
 import React from 'react'
 import Dashboard from '../components/Dashboard'
+import AdminDashboard from '../components/AdminDashboard'
+import { isAuth } from '../actions/auth';
 
 const URL = process.env.URL
 
 export default function Renewed({certs}) {
   // console.log({certs})
   return (
-    <Dashboard certs={certs} pageName="Renewed" />
+    <>
+    { isAuth() ? (<AdminDashboard certs={certs} pageName="Admin Renewed" />) :  (<Dashboard certs={certs} pageName="Renewed" />)}
+    </>
   )
 }
 

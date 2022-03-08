@@ -322,9 +322,6 @@ export default function EnhancedTable({rows}) {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <div className='h-screen w-full relative overflow-hidden flex justify-center '>
-      <div className="h-80-r w-80-r bg-gradient-to-r from-green-400 to-blue-500 rounded-full absolute left-1/3 -top-56 transform rotate-160 animate-pulse"></div>
-        <div className="h-80-r w-80-r bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-full absolute top-96 -left-20 transform rotate-180 animate-pulse"></div>
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }} className='bg-white bg-opacity-10 rounded-2xl text-white shadow-5xl relative z-2 border border-opacity-30 border-r-0 border-b-0 backdrop-filter backdrop-blur-sm'>
         <EnhancedTableToolbar numSelected={selected.length} bulkEdit={bulkEdit}/>
@@ -419,6 +416,5 @@ export default function EnhancedTable({rows}) {
         label="Dense padding"
       />
     </Box>
-    </div>
   );
 }
